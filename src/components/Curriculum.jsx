@@ -28,27 +28,28 @@ export default function Curriculum() {
   return (
     <section
       id="curriculum"
-      className="py-20 px-4"
-      style={{ background: "#e8e8e8" }}
+      className="pb-20 pt-40 px-4"
+      style={{ background: "#D9D9D9", fontFamily: "'Poppins', sans-serif", }}
+      
     >
-      <div className="max-w-3xl mx-auto">
+      <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="text-center mb-12">
           <h2
-            className="text-black font-black text-3xl sm:text-4xl lg:text-5xl mb-3"
+            className="text-black font-medium text-3xl md:text-5xl mb-3"
             style={{ letterSpacing: "-0.02em" }}
           >
             Inside the Complete Program
           </h2>
-          <p className="text-gray-500 text-base sm:text-lg">
-            Every module is designed to help you move forward with clarity and confidence.
+          <p className="text-gray-500 text-xl md:text-2xl font-normal">
+            Every module is designed to help you move forward with <br className="hidden md:block"/>clarity and confidence.
           </p>
         </div>
 
-        {/* Accordion card */}
+        <div className="md:p-6 p-4 bg-white/40 rounded-4xl">
+          {/* Accordion card */}
         <div
-          className="bg-white rounded-3xl overflow-hidden shadow-lg"
-          style={{ boxShadow: "0 4px 40px rgba(0,0,0,0.08), 0 0 0 1px rgba(0,0,0,0.06)" }}
+          className="bg-white rounded-3xl overflow-hidden md:p-5"
         >
           {modules.map((mod, i) => (
             <div key={i} className={`${i !== 0 ? "border-t border-gray-100" : ""}`}>
@@ -63,11 +64,11 @@ export default function Curriculum() {
                   ) : (
                     <ChevronDown size={16} className="text-gray-400 flex-shrink-0" />
                   )}
-                  <span className="font-bold text-black text-sm sm:text-base">
+                  <span className=" text-black text-base md:text-xl">
                     {mod.title}
                   </span>
                 </div>
-                <div className="flex items-center gap-1.5 text-gray-400 text-xs flex-shrink-0 ml-4">
+                <div className="md:flex items-center gap-1.5 text-[#31354A] text-xs md:flex-shrink-0 ml-4 hidden">
                   <BookOpen size={13} />
                   <span>{mod.lessons} lessons</span>
                 </div>
@@ -81,13 +82,13 @@ export default function Curriculum() {
                       key={j}
                       className="flex items-center justify-between px-6 py-3 hover:bg-gray-50 transition-colors"
                     >
-                      <div className="flex items-center gap-3 text-gray-600 text-sm">
-                        <Video size={14} className="text-gray-400 flex-shrink-0" />
+                      <div className="flex items-center gap-3 text-[#31354A] font-normal text-xs md:text-base">
+                        <Video className="text-[#31354A] flex-shrink-0" />
                         <span>{item}</span>
                       </div>
                       <span
-                        className="text-xs font-semibold px-3 py-1 rounded-full ml-4 flex-shrink-0"
-                        style={{ background: "#fef9c3", color: "#92400e" }}
+                        className="text-xs px-3 py-1 rounded-full ml-4 md:flex-shrink-0 hidden md:block"
+                        style={{ background: "#fef9c3", }}
                       >
                         LESSON
                       </span>
@@ -98,18 +99,46 @@ export default function Curriculum() {
             </div>
           ))}
         </div>
+        </div>
 
         {/* Enroll button */}
         <div className="flex justify-center mt-10">
+         {/* Enroll Now button */}
+        <div
+          style={{
+            background: "linear-gradient(135deg, #fff, #d9d3d3)",
+            borderRadius: 999,
+            padding: 8,
+            boxShadow: "0 2px 20px rgba(0,0,0,.1), inset 0 0 0 1px rgba(255,255,255,.6)",
+            transition: "transform .3s",
+          }}
+          onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.05)")}
+          onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
+        >
           <button
-            className="flex items-center gap-2 text-white font-semibold text-base px-8 py-3.5 rounded-full transition-all hover:scale-105 active:scale-95 shadow-lg"
             style={{
-              background: "linear-gradient(145deg, #2a2a2a, #111)",
-              boxShadow: "0 8px 30px rgba(0,0,0,0.3)",
+              fontFamily: "'Inter', sans-serif",
+              fontWeight: 500,
+              fontSize: 18,
+              color: "rgba(255,255,255,.6)",
+              background: "linear-gradient(180deg, #2c2c2c, #111)",
+              border: "none",
+              borderRadius: 999,
+              padding: "13px 28px",
+              cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
+              gap: 10,
+              whiteSpace: "nowrap",
+              boxShadow:
+                "inset 0 -16px 48px #000," +
+                "0 24px 75px rgba(0,0,0,.18)",
+              outline: "none",
             }}
           >
-            Enroll Now →
+            Enroll Now <span style={{ fontSize: 17 }}>→</span>
           </button>
+        </div>
         </div>
       </div>
     </section>

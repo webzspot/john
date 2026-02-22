@@ -27,53 +27,113 @@ export default function Pricing() {
   return (
     <div id="pricing">
       {/* Pricing Section */}
-      <section className="py-20 px-4" style={{ background: "#e8e8e8" }}>
-        <div className="max-w-2xl mx-auto">
-          <div className="text-center mb-10">
-            <h2
-              className="text-black font-black text-3xl sm:text-4xl mb-2"
-              style={{ letterSpacing: "-0.02em" }}
-            >
-              Choose Your Access
-            </h2>
-            <p className="text-gray-500 text-sm">
-              Choose how you'd like to get started full access, installments, or prebook.
-            </p>
-          </div>
+      <section className="py-20 px-4" style={{ background: "#D9D9D9" }}>
+        <div className="max-w-6xl mx-auto">
+          
+           <div className="text-center">
+          <h2
+            className="text-black font-medium text-3xl md:text-5xl mb-3"
+            style={{ letterSpacing: "-0.02em" }}
+          >
+             Choose Your Access
+          </h2>
+          <p className="text-gray-500 text-xl md:text-2xl font-normal">
+          Choose how you'd like to get started full access, <br className="hidden md:block"/> installments, or prebook.
+          </p>
+        </div>
 
           {/* Pricing card */}
-          <div
+         <div className="mt-20 p-6 bg-white/40 rounded-4xl">
+           <div
             className="bg-white rounded-3xl p-1 shadow-xl overflow-hidden"
             style={{ boxShadow: "0 8px 50px rgba(0,0,0,0.1), 0 0 0 1px rgba(0,0,0,0.06)" }}
           >
             <div className="flex flex-col sm:flex-row">
               {/* Full Access */}
               <div className="flex-1 p-7">
-                <p className="text-gray-500 text-sm mb-2">One-time payment</p>
+                <p className="text-black mb-4 font-light text-2xl">One-time payment</p>
                 <p
-                  className="font-black text-black text-4xl mb-1"
+                  className="font-black text-black text-5xl md:text-7xl mb-1"
                   style={{ letterSpacing: "-0.02em" }}
                 >
                   ₹2,999/-
                 </p>
-                <p className="text-gray-400 text-xs mb-5">
+                <p className="text-gray-400 text-xs md:text-base font-light mb-5">
                   You can also pay in 2 easy{" "}
-                  <span className="font-bold text-gray-600">installments of ₹1,499.</span>
+                  <span className="font-normal text-black">installments of ₹1,499.</span>
                 </p>
 
                 <div className="flex gap-3 mb-6">
-                  <button
-                    className="flex items-center gap-2 text-white font-semibold text-sm px-5 py-2.5 rounded-full flex-1 justify-center transition-all hover:scale-105"
-                    style={{ background: "linear-gradient(145deg, #2a2a2a, #111)" }}
-                  >
-                    Get Full access →
-                  </button>
-                  <button className="flex items-center gap-2 text-black font-semibold text-sm px-5 py-2.5 rounded-full border border-gray-200 hover:bg-gray-50 transition-all">
-                    Pay Installment →
-                  </button>
+                  
+                  <div
+          style={{
+            background: "linear-gradient(135deg, #fff, #d9d3d3)",
+            borderRadius: 999,
+            padding: 8,
+            boxShadow: "0 2px 20px rgba(0,0,0,.1), inset 0 0 0 1px rgba(255,255,255,.6)",
+            transition: "transform .3s",
+          }}
+          onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.05)")}
+          onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
+        >
+          <button
+            style={{
+              fontFamily: "'Inter', sans-serif",
+              fontWeight: 400,
+              fontSize: 14,
+              color: "rgba(255,255,255,.6)",
+              background: "linear-gradient(180deg, #2c2c2c, #111)",
+              border: "none",
+              borderRadius: 999,
+              padding: "13px 28px",
+              cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
+              gap: 10,
+              whiteSpace: "nowrap",
+              boxShadow:
+                "inset 0 -16px 48px #000," +
+                "0 24px 75px rgba(0,0,0,.18)",
+              outline: "none",
+            }}
+          >
+            Get Full access <span style={{ fontSize: 17 }}>→</span>
+          </button>
+        </div>
+                 
+                  <div
+          style={{
+            background: "linear-gradient(135deg, #fff, #d9d3d3)",
+            borderRadius: 999,
+            padding: 8,
+            boxShadow: "0 2px 20px rgba(0,0,0,.1), inset 0 0 0 1px rgba(255,255,255,.6)",
+            transition: "transform .3s",
+          }}
+          onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.05)")}
+          onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
+        >
+          <button
+            style={{
+              fontFamily: "'Inter', sans-serif",
+              fontWeight: 500,
+              fontSize: 14,
+              borderRadius: 999,
+              padding: "13px 28px",
+              cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
+              gap: 10,
+              whiteSpace: "nowrap",
+              outline: "none",
+            }}
+            className="bg-white border-[1.5px] border-black"
+          >
+             Pay Installment <span style={{ fontSize: 17 }}>→</span>
+          </button>
+        </div>
                 </div>
 
-                <p className="text-xs font-semibold text-gray-700 mb-3">What's included</p>
+                <p className="text-xs md:text-3xl text-black mb-3">What's included</p>
                 <ul className="space-y-2.5">
                   {[
                     "Full Course Access",
@@ -83,8 +143,8 @@ export default function Pricing() {
                     "Schedule 1:1 Call with Agnel John (45 min)",
                     "Full Course Access",
                   ].map((item, i) => (
-                    <li key={i} className="flex items-start gap-2 text-sm text-gray-600">
-                      <Check size={15} className="text-green-500 flex-shrink-0 mt-0.5" />
+                    <li key={i} className="flex items-start gap-2 text-sm text-gray-600 md:text-xl">
+                      <Check size={15} className="text-black flex-shrink-0 mt-2" />
                       {item}
                     </li>
                   ))}
@@ -131,11 +191,12 @@ export default function Pricing() {
               </div>
             </div>
           </div>
+         </div>
         </div>
       </section>
 
       {/* FAQ Section */}
-      <section className="py-16 px-4" style={{ background: "#e8e8e8" }}>
+      <section className="py-16 px-4" style={{ background: "#D9D9D9" }}>
         <div className="max-w-2xl mx-auto">
           <div className="text-center mb-10">
             <h2

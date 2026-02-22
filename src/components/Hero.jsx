@@ -172,9 +172,9 @@ export default function Hero() {
 
   return (
     <section
+    className="md:min-h-screen"
       style={{
         background: "#D9D9D9",
-        minHeight: "100svh",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
@@ -268,7 +268,7 @@ export default function Hero() {
           lineHeight: 1.65,
           margin: "32px auto 28px",
           padding: "0 8px",
-          letterSpacing: "-0.05em"
+          letterSpacing: "-0.03em"
         }}
       >
         Learn how to position your course as the only choice and scale your education business.

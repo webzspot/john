@@ -5,6 +5,7 @@ import WhoIsThisFor from "./components/WhoIsThisFor";
 import Curriculum from "./components/Curriculum";
 import Testimonials from "./components/Testimonials";
 import Pricing from "./components/Pricing";
+import Book from "./components/Book";
 
 export default function App() {
   return (
@@ -12,6 +13,7 @@ export default function App() {
       <Navbar />
       <Hero />
       <VideoSection />
+      <Book/>
       <WhoIsThisFor />
       <Curriculum />
       <Testimonials />

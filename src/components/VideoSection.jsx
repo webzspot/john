@@ -10,49 +10,58 @@ export default function VideoSection() {
   return (
     <section
       id="about"
-      className="py-16 px-4"
-      style={{ background: "#e8e8e8" }}
+      className="md:pt-16 pb-10 md:pb-16 px-4"
+      style={{ background: "#D9D9D9" }}
     >
-      <div className="max-w-3xl mx-auto">
+      <div className="max-w-7xl mx-auto">
+        <div className="rounded-[25px] shadow-xl p-6 bg-white/40">
         <div
-          className="rounded-[28px] overflow-hidden shadow-2xl"
-          style={{
-            background: "#1a1a1a",
-            boxShadow: "0 30px 80px rgba(0,0,0,0.3), 0 0 0 1px rgba(255,255,255,0.08)",
-          }}
+          className="rounded-[25px] overflow-hidden"
+          
         >
           {/* Video embed */}
-          <div className="relative w-full" style={{ aspectRatio: "640/360" }}>
+          <div className="relative w-full rounded-[28px]" style={{ aspectRatio: "16/9" }}>
             <iframe
-              src="https://player.cloudinary.com/embed/?cloud_name=dnbjncck1&public_id=My_Video-highlight_ggqt9b"
-              style={{ height: "auto", width: "100%", aspectRatio: "640 / 360" }}
+              src="https://player.cloudinary.com/embed/?cloud_name=dnbjncck1&public_id=Emc_full_2_1_xnpti5"
+              style={{ height: "100%", width: "100%", }}
               allow="autoplay; fullscreen; encrypted-media; picture-in-picture"
               allowFullScreen
               frameBorder="0"
               className="w-full h-full"
             />
+
+             {/* Dark gradient shadow at bottom of video */}
+            <div
+              className="absolute bottom-0 left-0 right-0 pointer-events-none"
+              style={{
+                height: "45%",
+                background: "linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.55) 60%, rgba(15,15,15,0.92) 100%)",
+              }}
+            />
+            
           </div>
+          
 
           {/* Currently playing */}
-          <div className="px-5 py-3 border-b border-white/10">
-            <div className="flex items-center gap-2 text-white text-sm font-medium">
+          <div className="px-5 py-4 border-b border-white/10 bg-black">
+            <div className="flex items-start gap-2 text-white text-xs md:text-sm font-medium">
               <span className="text-white">▶</span>
               <span>1.1. The Growth Laws of My EdTech - My Own Story</span>
             </div>
           </div>
 
           {/* Locked modules */}
-          <div className="divide-y divide-white/10">
+          <div className="divide-y divide-white/10 bg-black">
             {modules.map((m) => (
               <div
                 key={m.module}
                 className="flex items-center justify-between px-5 py-3.5"
               >
-                <div className="flex items-center gap-2.5 text-gray-400 text-sm">
-                  <Lock size={14} className="text-gray-500" />
+                <div className="flex items-center gap-2.5 text-[#CFCFCF] text-xs md:text-sm">
+                  <Lock size={14} className="text-[#CFCFCF]" />
                   <span>{m.title}</span>
                 </div>
-                <div className="flex items-center gap-1.5 bg-white/10 rounded-full px-3 py-1 text-xs text-gray-400">
+                <div className="hidden md:flex items-center gap-1.5 bg-[#CFCFCF] rounded-full px-3 py-1.5 text-xs text-[#1D1D1D]">
                   <Lock size={11} />
                   <span>Module {m.module} Locked</span>
                 </div>
@@ -60,6 +69,7 @@ export default function VideoSection() {
             ))}
           </div>
         </div>
+      </div>
       </div>
     </section>
   );
