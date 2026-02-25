@@ -1,5 +1,10 @@
 import { useEffect, useState, useRef } from "react";
 import { motion } from "framer-motion";
+import trusted from "../assets/images/trusted.png";
+import OtpModal from "./OtpModel";
+
+// ─── Replace with your actual course ID from GET /courses ────────────────────
+const COURSE_ID = 1;
 
 function RollingDigit({ digit }) {
   const [current, setCurrent] = useState(digit);
@@ -15,52 +20,29 @@ function RollingDigit({ digit }) {
   }, [digit]); // eslint-disable-line
 
   return (
-    <span
-      style={{
-        position: "relative",
-        display: "inline-block",
-        // overflow: "hidden", 
-        width: "0.6em",
-        lineHeight: "inherit",
-        verticalAlign: "top",
-      }}
-    >
-      {/* outgoing — fly up & blur out */}
+    <span className="relative inline-block w-[0.6em] leading-inherit align-top">
       {prev !== null && (
         <motion.span
           key={`o${k}`}
           initial={{ y: "0%", opacity: 1, filter: "blur(0px)" }}
           animate={{ y: "-115%", opacity: 0, filter: "blur(6px)" }}
-          transition={{ duration: 0.32, ease: [0.55, 0, 1, 0.45] }}
-          style={{
-            position: "absolute",
-            inset: 0,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            pointerEvents: "none",
-          }}
+          transition={{ duration: 0.14, ease: [0.55, 0, 1, 0.45] }}
+          className="absolute inset-0 flex items-center justify-center pointer-events-none"
         >
           {prev}
         </motion.span>
       )}
 
-      {/* incoming — rise from below */}
       <motion.span
         key={`i${k}`}
-        initial={prev !== null
-          ? { y: "115%", opacity: 0, filter: "blur(6px)" }
-          : { y: "0%",   opacity: 1, filter: "blur(0px)" }}
+        initial={
+          prev !== null
+            ? { y: "115%", opacity: 0, filter: "blur(6px)" }
+            : { y: "0%", opacity: 1, filter: "blur(0px)" }
+        }
         animate={{ y: "0%", opacity: 1, filter: "blur(0px)" }}
-        transition={prev !== null
-          ? { duration: 0.42, ease: [0, 0.55, 0.45, 1] }
-          : {}}
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          width: "100%",
-        }}
+        transition={prev !== null ? { duration: 0.18, ease: [0, 0.55, 0.45, 1] } : {}}
+        className="flex items-center justify-center w-full"
       >
         {current}
       </motion.span>
@@ -68,13 +50,10 @@ function RollingDigit({ digit }) {
   );
 }
 
-/* ─────────────────────────────────────────────
-   Two-digit rolling display
-───────────────────────────────────────────── */
 function RollingNumber({ value }) {
   const str = String(value).padStart(2, "0");
   return (
-    <span style={{ display: "inline-flex", letterSpacing: 0 }}>
+    <span className="inline-flex tracking-[0]">
       {str.split("").map((d, i) => (
         <RollingDigit key={i} digit={d} />
       ))}
@@ -82,274 +61,179 @@ function RollingNumber({ value }) {
   );
 }
 
-/* ─────────────────────────────────────────────
-   Step counter — one integer tick per `stepMs`
-   UPDATED: Same timing for both counters now
-───────────────────────────────────────────── */
-function useStepCount(target, from = 0, stepMs = 525) { // Using same step duration for both
+function useStepCount(target, from = 0, stepMs = 120) {
   const [count, setCount] = useState(from);
   const timer = useRef(null);
 
   useEffect(() => {
     setCount(from);
     let cur = from;
-
     const tick = () => {
       cur += 1;
       setCount(cur);
       if (cur < target) timer.current = setTimeout(tick, stepMs);
     };
-
-    timer.current = setTimeout(tick, 750); // start after first paint
+    timer.current = setTimeout(tick, 750);
     return () => clearTimeout(timer.current);
   }, [target, from, stepMs]);
 
   return count;
 }
 
-/* ─────────────────────────────────────────────
-   Badge wrapper — floating dark pill
-   NO overflow:hidden here — the digit handles it
-   Optimized padding for both "10" and "03" displays
-───────────────────────────────────────────── */
 function Badge({ children, floatAnim, value }) {
-  // Optimized padding values for different digit counts
-  const leftPadding = String(value).length === 1 
-    ? "0.5em 0.9em 0em 0.9em"   // Single digit: less horizontal padding
-    : "0.06em 1.7em 0.06em 0.8em";  // Double digit: balanced for both digits
+  const paddingClass =
+    String(value).length === 1
+      ? "pt-0 pr-[0.9em] pb-0 pl-[0.9em]"
+      : "pt-[0.06em] pr-[1.7em] pb-[0.06em] pl-[0.8em]";
+
   return (
     <motion.div
       animate={floatAnim.animate}
       transition={floatAnim.transition}
-      style={{
-        display: "inline-flex",
-        alignItems: "center",
-        background: "linear-gradient(135deg, #2d2d2d, #0c0c0c)",
-        borderRadius: "clamp(12px, 3vw, 40px)",
-        padding: leftPadding,
-        boxShadow:
-          "24px 24px 34px -4px rgba(0,0,0,.09)," +
-          "11px 11px 15px -4px rgba(0,0,0,.32)," +
-          "5px  5px  8px  -3px rgba(0,0,0,.41)," +
-          "3px  3px  4px  -2px rgba(0,0,0,.46)," +
-          "1px  1px  2px  -1px rgba(0,0,0,.5)",
-        flexShrink: 0,
-        overflow: "hidden"
-      }}
+      className={`inline-flex items-center bg-gradient-to-br from-[#2d2d2d] to-[#0c0c0c] rounded-[clamp(12px,3vw,40px)] ${paddingClass} shadow-[24px_24px_34px_-4px_rgba(0,0,0,.09),11px_11px_15px_-4px_rgba(0,0,0,.32),5px_5px_8px_-3px_rgba(0,0,0,.41),3px_3px_4px_-2px_rgba(0,0,0,.46),1px_1px_2px_-1px_rgba(0,0,0,.5)] flex-shrink-0 overflow-hidden`}
     >
       {children}
     </motion.div>
   );
 }
 
-/* ─────────────────────────────────────────────
-   Main Hero
-   UPDATED: Both counters now use the same timing (525ms)
-───────────────────────────────────────────── */
 export default function Hero() {
-  // Both counters now use the same step duration (525ms)
-  const count10 = useStepCount(10, 7, 525);
-  const count3  = useStepCount(3,  0, 525);
-  const avatarIds = [1, 2, 3, 4, 5];
-
-  // Shared text style (applied via inline style so it's 100% consistent)
-  const textBase = {
-    fontFamily: "'Poppins', sans-serif",
-    fontSize:   "clamp(2.2rem, 6.4vw, 100px)",
-    lineHeight: 1.28,
-    letterSpacing: "clamp(-1px, -0.25vw, -4px)",
-    whiteSpace: "nowrap",
-  };
+  const count10 = useStepCount(10, 0, 120);
+  const count3 = 3;
+  const [modal, setModal] = useState(null);
 
   const float1 = {
-    animate:    { y: [0, -9, 0], rotate: [-2, -0.8, -2] },
+    animate: { y: [0, -9, 0], rotate: [-2, -0.8, -2] },
     transition: { duration: 3.6, repeat: Infinity, ease: "easeInOut" },
   };
   const float2 = {
-    animate:    { y: [6, -3, 6], rotate: [1, 2.2, 1] },
+    animate: { y: [6, -3, 6], rotate: [1, 2.2, 1] },
     transition: { duration: 4.1, repeat: Infinity, ease: "easeInOut" },
   };
 
   return (
-    <section
-    className="md:min-h-screen"
-      style={{
-        background: "#D9D9D9",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        textAlign: "center",
-        padding: "80px 24px 60px",
-        boxSizing: "border-box",
-      }}
-    >
+    <section className="lg:min-h-screen bg-[#D9D9D9] flex flex-col items-center justify-center text-center px-6 py-20 box-border">
+      {/* OTP Modal */}
+      {modal && (
+        <OtpModal
+          packageType={modal.packageType}
+          courseId={COURSE_ID}
+          onClose={() => setModal(null)}
+        />
+      )}
+
       {/* ── Hello! ── */}
-      <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 20 }}>
-        <div style={{ height: 3.5, width: 64, background: "linear-gradient(to left, rgba(0,0,0,.22), transparent)" }} />
-        <span
-          style={{
-            fontFamily: "'Instrument Serif', serif",
-            color: "rgba(0,0,0,.5)",
-            fontSize: "clamp(26px, 4vw, 55px)",
-            fontStyle: "italic",
-            letterSpacing: "0.01em",
-            lineHeight: 1,
-          }}
-        >
+      <div className="flex items-center gap-3.5 mb-5 mt-10 lg:mt-0">
+        <div className="h-[3.5px] w-16 bg-gradient-to-r from-transparent to-black/22" />
+        <span className="font-['Instrument_Serif'] text-black/50 text-[clamp(26px,4vw,55px)] italic tracking-[0.01em] leading-none">
           Hello!
         </span>
-        <div style={{ height: 3.5, width: 64, background: "linear-gradient(to right, rgba(0,0,0,.22), transparent)" }} />
+        <div className="h-[3.5px] w-16 bg-gradient-to-l from-transparent to-black/22" />
       </div>
 
       {/* ── Headline block ── */}
-      <div style={{ maxWidth: 1100, width: "100%" }}>
-
+      <div className="max-w-6xl w-full">
         {/* Row 1 — "I Scaled to [10] Crore" */}
-        <div
-          style={{
-            display: "flex",
-            flexWrap: "wrap",
-            alignItems: "center",
-            justifyContent: "center",
-            gap: "clamp(6px, 1vw, 14px)",
-            rowGap: 6,
-          }}
-        >
-          <span style={{ ...textBase, fontWeight: 800, color: "#000", letterSpacing: "-0.05em" }}>
+        <div className="flex flex-wrap items-center justify-center gap-[clamp(6px,1vw,14px)]">
+          <span className="font-['Poppins'] font-extrabold text-black text-[clamp(2.2rem,6.4vw,100px)] leading-[1.28] tracking-[-0.05em] whitespace-nowrap">
             I Scaled to
           </span>
 
           <Badge floatAnim={float1} value={count10}>
-            <span style={{ ...textBase, fontWeight: 800, color: "#E3E3E3", fontStyle: "italic" }}>
+            <span className="font-['Poppins'] font-extrabold text-[#E3E3E3] italic text-[clamp(2.2rem,6.4vw,100px)] leading-[1.28] tracking-[-0.25vw] whitespace-nowrap">
               <RollingNumber value={count10} />
             </span>
           </Badge>
+          <br className="md:hidden" />
 
-          <span style={{ ...textBase, fontWeight: 500, color: "rgba(0,0,0,.5)",letterSpacing: "-0.05em" }}>
+          <span className="font-['Poppins'] font-medium text-black/50 text-[clamp(2.2rem,6.4vw,100px)] leading-[1.28] tracking-[-0.05em] whitespace-nowrap">
             Crore
           </span>
         </div>
 
         {/* Row 2 — "in [03] years." */}
-        <div
-          style={{
-            display: "flex",
-            flexWrap: "wrap",
-            alignItems: "center",
-            justifyContent: "center",
-            gap: "clamp(6px, 1vw, 14px)",
-            rowGap: 6,
-          }}
-        >
-          <span style={{ ...textBase, fontWeight: 500, color: "rgba(0,0,0,.5)",letterSpacing: "-0.05em" }}>
+        <div className="flex flex-wrap items-center justify-center gap-[clamp(6px,1vw,14px)]">
+          <span className="font-['Poppins'] font-medium text-black/50 text-[clamp(2.2rem,6.4vw,100px)] leading-[1.28] tracking-[-0.05em] whitespace-nowrap">
             in
           </span>
 
           <Badge floatAnim={float2} value={count3}>
-            <span style={{ ...textBase, fontWeight: 800, color: "#E3E3E3", fontStyle: "italic" }}>
-              <RollingNumber value={count3} />
+            <span className="font-['Poppins'] font-extrabold text-[#E3E3E3] italic text-[clamp(2.2rem,6.4vw,100px)] leading-[1.28] tracking-[-0.25vw] whitespace-nowrap">
+              03
             </span>
           </Badge>
 
-          <span style={{ ...textBase, fontWeight: 800, color: "#000", letterSpacing: "-0.04em"  }}>
+          <span className="font-['Poppins'] font-extrabold text-black text-[clamp(2.2rem,6.4vw,100px)] leading-[1.28] tracking-[-0.04em] whitespace-nowrap">
             years.
           </span>
         </div>
       </div>
 
       {/* ── Subtitle ── */}
-      <p
-        style={{
-          fontFamily: "'Inter', sans-serif",
-          fontSize: "clamp(17px, 2vw, 26px)",
-          color: "rgba(0,0,0,.4)",
-          maxWidth: 640,
-          lineHeight: 1.65,
-          margin: "32px auto 28px",
-          padding: "0 8px",
-          letterSpacing: "-0.03em"
-        }}
-      >
+      <p className="font-['Inter'] text-black/40 text-[clamp(17px,2vw,26px)] max-w-2xl leading-[1.65] my-8 px-2 tracking-[-0.03em]">
         Learn how to position your course as the only choice and scale your education business.
       </p>
 
       {/* ── CTA row ── */}
-      <div
-        style={{
-          display: "flex",
-          flexWrap: "wrap",
-          alignItems: "center",
-          justifyContent: "center",
-          gap: 22,
-        }}
-      >
-        {/* Enroll Now button */}
-        <div
-          style={{
-            background: "linear-gradient(135deg, #fff, #d9d3d3)",
-            borderRadius: 999,
-            padding: 8,
-            boxShadow: "0 2px 20px rgba(0,0,0,.1), inset 0 0 0 1px rgba(255,255,255,.6)",
-            transition: "transform .3s",
-          }}
-          onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.05)")}
-          onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
-        >
-          <button
+      <div className="flex flex-wrap items-center justify-center gap-5.5">
+        <div className="flex justify-center">
+          <motion.div
             style={{
-              fontFamily: "'Inter', sans-serif",
-              fontWeight: 500,
-              fontSize: 18,
-              color: "rgba(255,255,255,.6)",
-              background: "linear-gradient(180deg, #2c2c2c, #111)",
-              border: "none",
+              background: "linear-gradient(135deg, #fff, #d9d3d3)",
               borderRadius: 999,
-              padding: "13px 28px",
-              cursor: "pointer",
-              display: "flex",
-              alignItems: "center",
-              gap: 10,
-              whiteSpace: "nowrap",
-              boxShadow:
-                "inset 0 -16px 48px #000," +
-                "0 24px 75px rgba(0,0,0,.18)",
-              outline: "none",
+              padding: 8,
+              boxShadow: "0 2px 20px rgba(0,0,0,.1), inset 0 0 0 1px rgba(255,255,255,.6)",
             }}
+            
+            transition={{ duration: 0.5, delay: 0.8 }}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
           >
-            Enroll Now <span style={{ fontSize: 17 }}>→</span>
-          </button>
+            <motion.button
+              onClick={() => setModal({ packageType: "Regular" })}
+              style={{
+                fontFamily: "'Inter', sans-serif",
+                fontWeight: 500,
+                fontSize: 18,
+                color: "rgba(255,255,255,.6)",
+                background: "linear-gradient(180deg, #2c2c2c, #111)",
+                border: "none",
+                borderRadius: 999,
+                padding: "13px 28px",
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                gap: 10,
+                whiteSpace: "nowrap",
+                boxShadow: "inset 0 -16px 48px #000, 0 24px 75px rgba(0,0,0,.18)",
+                outline: "none",
+              }}
+              whileHover={{
+                background: "linear-gradient(180deg, #3c3c3c, #222)",
+                color: "rgba(255,255,255,.8)",
+              }}
+              whileTap={{ scale: 0.98 }}
+            >
+              Enroll Now
+              <motion.span
+                style={{ fontSize: 17 }}
+                animate={{ x: [0, 5, 0] }}
+                transition={{
+                  duration: 1.5,
+                  repeat: Infinity,
+                  repeatType: "loop",
+                  ease: "easeInOut",
+                }}
+              >
+                →
+              </motion.span>
+            </motion.button>
+          </motion.div>
         </div>
 
-        {/* Avatars */}
-        <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
-          <div style={{ display: "flex" }}>
-            {avatarIds.map((id, i) => (
-              <img
-                key={id}
-                src={`https://i.pravatar.cc/40?img=${id}`}
-                alt=""
-                style={{
-                  width: 36,
-                  height: 36,
-                  borderRadius: "50%",
-                  border: "1.5px solid #fff",
-                  objectFit: "cover",
-                  marginLeft: i === 0 ? 0 : -10,
-                  boxShadow: "0 1px 4px rgba(0,0,0,.12)",
-                }}
-              />
-            ))}
-          </div>
-          <span
-            style={{
-              fontFamily: "'Inter', sans-serif",
-              fontSize: 13,
-              color: "rgba(0,0,0,.4)",
-            }}
-          >
-            Trusted by Leaders
-          </span>
+        <div className="flex flex-col gap-1">
+          <img src={trusted} alt="Trusted by Leaders" className="h-10" />
+          <span className="font-['Inter'] text-xs text-black/40">Trusted by Leaders</span>
         </div>
       </div>
     </section>

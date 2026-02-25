@@ -13,8 +13,8 @@ export default function VideoSection() {
       className="md:pt-16 pb-10 md:pb-16 px-4"
       style={{ background: "#D9D9D9" }}
     >
-      <div className="max-w-7xl mx-auto">
-        <div className="rounded-[25px] shadow-xl p-6 bg-white/40">
+      <div className="max-w-6xl mx-auto">
+        <div className="rounded-[25px] shadow-xl p-4 md:p-6 bg-white/40">
         <div
           className="rounded-[25px] overflow-hidden"
           
@@ -22,7 +22,7 @@ export default function VideoSection() {
           {/* Video embed */}
           <div className="relative w-full rounded-[28px]" style={{ aspectRatio: "16/9" }}>
             <iframe
-              src="https://player.cloudinary.com/embed/?cloud_name=dnbjncck1&public_id=Emc_full_2_1_xnpti5"
+              src="https://player.cloudinary.com/embed/?cloud_name=dnbjncck1&public_id=TrailerAgnelCourse_tres9d"
               style={{ height: "100%", width: "100%", }}
               allow="autoplay; fullscreen; encrypted-media; picture-in-picture"
               allowFullScreen
